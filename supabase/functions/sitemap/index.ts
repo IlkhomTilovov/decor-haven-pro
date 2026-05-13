@@ -28,8 +28,10 @@ serve(async (req) => {
     // Use primary_domain from settings, or fallback to request origin
     const url = new URL(req.url);
     const fallbackUrl = `${url.protocol}//${url.host}`.replace('/functions/v1/sitemap', '');
-    const siteUrl = settingsData?.primary_domain || 
+    const rawSiteUrl = settingsData?.primary_domain || 
       (fallbackUrl.includes('supabase') ? 'https://example.com' : fallbackUrl);
+    // Normalize: strip trailing slashes to avoid double slashes in URLs
+    const siteUrl = String(rawSiteUrl).replace(/\/+$/, '');
 
     // Fetch active categories
     const { data: categories } = await supabaseClient
