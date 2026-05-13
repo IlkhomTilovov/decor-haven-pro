@@ -38,7 +38,7 @@ export function Footer() {
                 <img 
                   src={logoUrl} 
                   alt={siteName} 
-                  className="h-12 max-w-[180px] object-contain brightness-0 invert"
+                  className="h-12 max-w-[180px] object-contain"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                     const fallback = e.currentTarget.nextElementSibling;
