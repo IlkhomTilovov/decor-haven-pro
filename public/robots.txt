@@ -1,8 +1,10 @@
 User-agent: Googlebot
 Allow: /
+Disallow: /admin
 
 User-agent: Bingbot
 Allow: /
+Disallow: /admin
 
 User-agent: Twitterbot
 Allow: /
@@ -12,3 +14,9 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /checkout
+Disallow: /thank-you
+Disallow: /cart
+
+Sitemap: https://decor-haven-pro.lovable.app/sitemap.xml
