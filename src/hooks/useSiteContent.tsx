@@ -141,7 +141,7 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
       if (existing) {
         const { error } = await supabase
           .from('site_content')
-          .update({ [updateField]: value })
+          .update({ [updateField]: value } as never)
           .eq('key', key);
 
         if (error) throw error;
@@ -153,7 +153,7 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
             key,
             [updateField]: value,
             content_type: 'text',
-          });
+          } as never);
 
         if (error) throw error;
       }
