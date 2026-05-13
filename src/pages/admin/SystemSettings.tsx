@@ -205,7 +205,20 @@ export default function SystemSettings() {
       const newFaviconUrl = urlData.publicUrl;
       setFormData({ ...formData, favicon_url: newFaviconUrl });
       setFaviconPreview(newFaviconUrl);
-      toast({ title: 'Muvaffaqiyat', description: 'Favicon yuklandi' });
+
+      // Brauzer tabidagi faviconni darhol yangilash (save kutmasdan)
+      const cacheBusted = `${newFaviconUrl}?v=${Date.now()}`;
+      document.querySelectorAll("link[rel*='icon']").forEach((l) => l.remove());
+      const link = document.createElement('link');
+      link.rel = 'icon';
+      link.href = cacheBusted;
+      document.head.appendChild(link);
+      const shortcut = document.createElement('link');
+      shortcut.rel = 'shortcut icon';
+      shortcut.href = cacheBusted;
+      document.head.appendChild(shortcut);
+
+      toast({ title: 'Muvaffaqiyat', description: 'Favicon yuklandi va brauzer tabida yangilandi' });
     } catch (error: any) {
       console.error('Upload error:', error);
       toast({ variant: 'destructive', title: 'Xatolik', description: error.message || 'Faviconni yuklashda xatolik' });
