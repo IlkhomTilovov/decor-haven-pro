@@ -19,4 +19,4 @@ Disallow: /checkout
 Disallow: /thank-you
 Disallow: /cart
 
-Sitemap: https://decor-haven-pro.lovable.app/sitemap.xml
+Sitemap: https://chorrom.uz/sitemap.xml
