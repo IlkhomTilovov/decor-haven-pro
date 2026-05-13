@@ -639,25 +639,32 @@ export default function SystemSettings() {
                 </p>
               </div>
 
-              <div className="p-4 bg-muted rounded-lg space-y-2">
-                <h4 className="font-medium text-sm">Sitemap</h4>
-                <p className="text-xs text-muted-foreground">
-                  Sitemap avtomatik ravishda yaratiladi va quyidagi manzilda mavjud:
-                </p>
-                <code className="text-xs bg-background px-2 py-1 rounded block">
-                  {formData.primary_domain || window.location.origin}/sitemap.xml
-                </code>
-              </div>
+              {(() => {
+                const baseUrl = (formData.primary_domain || window.location.origin).replace(/\/+$/, '');
+                return (
+                  <>
+                    <div className="p-4 bg-muted rounded-lg space-y-2">
+                      <h4 className="font-medium text-sm">Sitemap</h4>
+                      <p className="text-xs text-muted-foreground">
+                        Sitemap avtomatik ravishda yaratiladi va quyidagi manzilda mavjud:
+                      </p>
+                      <code className="text-xs bg-background px-2 py-1 rounded block">
+                        {baseUrl}/sitemap.xml
+                      </code>
+                    </div>
 
-              <div className="p-4 bg-muted rounded-lg space-y-2">
-                <h4 className="font-medium text-sm">Robots.txt</h4>
-                <p className="text-xs text-muted-foreground">
-                  robots.txt fayli quyidagi manzilda mavjud:
-                </p>
-                <code className="text-xs bg-background px-2 py-1 rounded block">
-                  {formData.primary_domain || window.location.origin}/robots.txt
-                </code>
-              </div>
+                    <div className="p-4 bg-muted rounded-lg space-y-2">
+                      <h4 className="font-medium text-sm">Robots.txt</h4>
+                      <p className="text-xs text-muted-foreground">
+                        robots.txt fayli quyidagi manzilda mavjud:
+                      </p>
+                      <code className="text-xs bg-background px-2 py-1 rounded block">
+                        {baseUrl}/robots.txt
+                      </code>
+                    </div>
+                  </>
+                );
+              })()}
             </CardContent>
           </Card>
         </TabsContent>
