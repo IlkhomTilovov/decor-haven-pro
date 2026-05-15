@@ -27,6 +27,7 @@ export default function Index() {
             className="w-full h-full object-cover"
             wrapperClassName="w-full h-full relative z-10"
             section="hero"
+            requireDb
           />
           <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/70 to-transparent pointer-events-none z-20" />
         </div>
