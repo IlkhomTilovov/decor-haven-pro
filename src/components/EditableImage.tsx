@@ -12,6 +12,8 @@ interface EditableImageProps {
   wrapperClassName?: string;
   section?: string;
   aspectRatio?: 'auto' | 'square' | 'video' | 'wide';
+  /** When true, never render the hardcoded fallback image in view mode — wait for DB value. */
+  requireDb?: boolean;
 }
 
 export function EditableImage({
@@ -22,14 +24,19 @@ export function EditableImage({
   wrapperClassName = '',
   section,
   aspectRatio = 'auto',
+  requireDb = false,
 }: EditableImageProps) {
   const { isEditMode, canEdit, selectElement, selectedElement } = useEditMode();
-  const { getContent } = useSiteContent();
-  
+  const { getContent, content, loading } = useSiteContent();
+
   const [isHovered, setIsHovered] = useState(false);
 
-  // Get image URL from content or use fallback
-  const currentSrc = getContent(contentKey, 'uz', '') || fallbackSrc;
+  const hasContent = !!content[contentKey];
+  const dbSrc = hasContent ? getContent(contentKey, 'uz', '') : '';
+  // In edit mode keep fallback so admin sees the placeholder image.
+  const currentSrc = isEditMode && canEdit
+    ? (dbSrc || fallbackSrc)
+    : (dbSrc || (requireDb ? '' : fallbackSrc));
   const isSelected = selectedElement?.contentKey === contentKey;
 
   const handleClick = (e: React.MouseEvent) => {
@@ -54,11 +61,18 @@ export function EditableImage({
 
   // Not in edit mode - render normally
   if (!isEditMode || !canEdit) {
+    // Strict mode: hide image until DB value is loaded — no flash of old fallback.
+    if (requireDb && (loading || !dbSrc)) {
+      return <div className={cn(wrapperClassName, getAspectRatioClass(), 'bg-muted/30')} aria-hidden="true" />;
+    }
+    if (!currentSrc) {
+      return <div className={cn(wrapperClassName, getAspectRatioClass())} aria-hidden="true" />;
+    }
     return (
       <div className={cn(wrapperClassName, getAspectRatioClass())}>
-        <img 
-          src={currentSrc} 
-          alt={alt} 
+        <img
+          src={currentSrc}
+          alt={alt}
           className={className}
         />
       </div>
