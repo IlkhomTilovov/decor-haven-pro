@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/components/ProductCard';
 import { useFeaturedProducts, useCategories } from '@/hooks/useProducts';
 import { useLanguage } from '@/hooks/useLanguage';
+import { useSiteContent } from '@/hooks/useSiteContent';
 import { EditableText } from '@/components/EditableText';
 import { EditableImage } from '@/components/EditableImage';
 import { LazyImage } from '@/components/LazyImage';
@@ -12,6 +13,7 @@ export default function Index() {
   const { language, t } = useLanguage();
   const { products: featuredProducts, loading: productsLoading } = useFeaturedProducts(8);
   const { categories, loading: categoriesLoading } = useCategories();
+  const { loading: contentLoading } = useSiteContent();
 
   return (
     <div className="min-h-screen">
