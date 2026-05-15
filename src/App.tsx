@@ -42,7 +42,16 @@ import SystemSettings from "./pages/admin/SystemSettings";
 import Themes from "./pages/admin/Themes";
 import CheckoutFormSettings from "./pages/admin/CheckoutFormSettings";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 0,
+      gcTime: 0,
+      refetchOnMount: true,
+      refetchOnWindowFocus: true,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
