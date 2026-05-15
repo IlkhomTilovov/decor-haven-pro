@@ -47,6 +47,7 @@ export default function Index() {
                   <EditableText
                     contentKey="hero_title"
                     fallback={t.hero.title}
+                    requireDb
                     as="span"
                     className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold"
                   />
@@ -55,6 +56,7 @@ export default function Index() {
                   <EditableText
                     contentKey="hero_subtitle"
                     fallback={t.hero.subtitle}
+                    requireDb
                     as="span"
                     className="text-lg"
                   />

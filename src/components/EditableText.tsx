@@ -13,6 +13,8 @@ interface EditableTextProps {
   multiline?: boolean;
   section?: string;
   field?: string;
+  /** When true, never render the hardcoded fallback in view mode — wait for DB value. */
+  requireDb?: boolean;
 }
 
 export function EditableText({
@@ -23,6 +25,7 @@ export function EditableText({
   multiline = false,
   section,
   field,
+  requireDb = false,
 }: EditableTextProps) {
   const { isEditMode, canEdit, selectElement, selectedElement } = useEditMode();
   const { getContent, content, loading } = useSiteContent();
@@ -31,12 +34,10 @@ export function EditableText({
   const [isHovered, setIsHovered] = useState(false);
 
   const hasContent = !!content[contentKey];
-  // In view mode never show hardcoded fallback — only show DB value once loaded.
-  const viewValue = hasContent ? getContent(contentKey, language, '') : '';
-  // In edit mode keep fallback visible so admin sees default placeholder.
+  const dbValue = hasContent ? getContent(contentKey, language, '') : '';
   const currentValue = isEditMode && canEdit
     ? getContent(contentKey, language, fallback)
-    : viewValue;
+    : (dbValue || (requireDb ? '' : fallback));
   const isSelected = selectedElement?.contentKey === contentKey;
 
   const handleClick = () => {
@@ -52,16 +53,16 @@ export function EditableText({
 
   // Not in edit mode or can't edit - render normally
   if (!isEditMode || !canEdit) {
-    // While CMS data loads OR key has no DB row, render an invisible placeholder
-    // (preserves layout height, never flashes hardcoded fallback).
-    if (loading || !hasContent || !viewValue) {
+    // Strict mode: hide until DB value is loaded (no flash of hardcoded text).
+    if (requireDb && (loading || !dbValue)) {
       return (
         <Component className={cn(className, 'opacity-0 select-none')} aria-hidden="true">
           {'\u00A0'}
         </Component>
       );
     }
-    return <Component className={className}>{viewValue}</Component>;
+    if (!currentValue) return null;
+    return <Component className={className}>{currentValue}</Component>;
   }
 
   // In edit mode - show editable element
