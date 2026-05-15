@@ -61,22 +61,10 @@ export default function Index() {
                 </p>
                 <div className="flex flex-wrap gap-4 animate-fade-in">
                   <Button asChild size="lg" className="rounded-full px-8">
-                    <Link to="/catalog">
-                      <EditableText
-                        contentKey="hero_cta"
-                        fallback={t.hero.cta}
-                        as="span"
-                      />
-                    </Link>
+                    <Link to="/catalog">{t.hero.cta}</Link>
                   </Button>
                   <Button asChild variant="outline" size="lg" className="rounded-full px-8">
-                    <Link to="/contact">
-                      <EditableText
-                        contentKey="hero_consultation"
-                        fallback={t.hero.consultation}
-                        as="span"
-                      />
-                    </Link>
+                    <Link to="/contact">{t.hero.consultation}</Link>
                   </Button>
                 </div>
               </>
