@@ -32,42 +32,55 @@ export default function Index() {
         </div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-xl">
-            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6 animate-fade-in">
-              <EditableText 
-                contentKey="hero_title" 
-                fallback={t.hero.title}
-                as="span"
-                className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold"
-              />
-            </h1>
-            <p className="text-lg text-muted-foreground mb-8 animate-fade-in">
-              <EditableText 
-                contentKey="hero_subtitle" 
-                fallback={t.hero.subtitle}
-                as="span"
-                className="text-lg"
-              />
-            </p>
-            <div className="flex flex-wrap gap-4 animate-fade-in">
-              <Button asChild size="lg" className="rounded-full px-8">
-                <Link to="/catalog">
-                  <EditableText 
-                    contentKey="hero_cta" 
-                    fallback={t.hero.cta}
+            {contentLoading ? (
+              <div className="space-y-6 animate-pulse">
+                <div className="h-12 md:h-16 lg:h-20 w-3/4 bg-muted/60 rounded" />
+                <div className="h-6 w-2/3 bg-muted/40 rounded" />
+                <div className="flex gap-4">
+                  <div className="h-12 w-40 bg-muted/40 rounded-full" />
+                  <div className="h-12 w-40 bg-muted/30 rounded-full" />
+                </div>
+              </div>
+            ) : (
+              <>
+                <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6 animate-fade-in">
+                  <EditableText
+                    contentKey="hero_title"
+                    fallback={t.hero.title}
                     as="span"
+                    className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold"
                   />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="rounded-full px-8">
-                <Link to="/contact">
-                  <EditableText 
-                    contentKey="hero_consultation" 
-                    fallback={t.hero.consultation}
+                </h1>
+                <p className="text-lg text-muted-foreground mb-8 animate-fade-in">
+                  <EditableText
+                    contentKey="hero_subtitle"
+                    fallback={t.hero.subtitle}
                     as="span"
+                    className="text-lg"
                   />
-                </Link>
-              </Button>
-            </div>
+                </p>
+                <div className="flex flex-wrap gap-4 animate-fade-in">
+                  <Button asChild size="lg" className="rounded-full px-8">
+                    <Link to="/catalog">
+                      <EditableText
+                        contentKey="hero_cta"
+                        fallback={t.hero.cta}
+                        as="span"
+                      />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg" className="rounded-full px-8">
+                    <Link to="/contact">
+                      <EditableText
+                        contentKey="hero_consultation"
+                        fallback={t.hero.consultation}
+                        as="span"
+                      />
+                    </Link>
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>
