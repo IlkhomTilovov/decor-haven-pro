@@ -25,12 +25,16 @@ export function EditableLink({
   rel = 'noopener noreferrer',
 }: EditableLinkProps) {
   const { isEditMode, canEdit, selectElement, selectedElement } = useEditMode();
-  const { getContent } = useSiteContent();
+  const { getContent, content, loading } = useSiteContent();
   const { language } = useLanguage();
-  
+
   const [isHovered, setIsHovered] = useState(false);
 
-  const currentValue = getContent(contentKey, language, fallback);
+  const hasContent = !!content[contentKey];
+  const dbValue = hasContent ? getContent(contentKey, language, '') : '';
+  const currentValue = isEditMode && canEdit
+    ? getContent(contentKey, language, fallback)
+    : dbValue;
   const isSelected = selectedElement?.contentKey === contentKey;
 
   const handleClick = (e: React.MouseEvent) => {
@@ -50,15 +54,15 @@ export function EditableLink({
 
   // Not in edit mode or can't edit - render normally
   if (!isEditMode || !canEdit) {
-    const href = currentValue || fallback;
-    if (!href || href === '#') {
+    // Never use hardcoded fallback URL in production — wait for DB value.
+    if (loading || !hasContent || !dbValue || dbValue === '#') {
       return <span className={className}>{children}</span>;
     }
     return (
-      <a 
-        href={href} 
-        target={target} 
-        rel={rel} 
+      <a
+        href={dbValue}
+        target={target}
+        rel={rel}
         className={className}
       >
         {children}

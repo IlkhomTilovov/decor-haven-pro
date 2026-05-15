@@ -25,12 +25,18 @@ export function EditableText({
   field,
 }: EditableTextProps) {
   const { isEditMode, canEdit, selectElement, selectedElement } = useEditMode();
-  const { getContent } = useSiteContent();
+  const { getContent, content, loading } = useSiteContent();
   const { language } = useLanguage();
-  
+
   const [isHovered, setIsHovered] = useState(false);
 
-  const currentValue = getContent(contentKey, language, fallback);
+  const hasContent = !!content[contentKey];
+  // In view mode never show hardcoded fallback — only show DB value once loaded.
+  const viewValue = hasContent ? getContent(contentKey, language, '') : '';
+  // In edit mode keep fallback visible so admin sees default placeholder.
+  const currentValue = isEditMode && canEdit
+    ? getContent(contentKey, language, fallback)
+    : viewValue;
   const isSelected = selectedElement?.contentKey === contentKey;
 
   const handleClick = () => {
@@ -46,7 +52,16 @@ export function EditableText({
 
   // Not in edit mode or can't edit - render normally
   if (!isEditMode || !canEdit) {
-    return <Component className={className}>{currentValue}</Component>;
+    // While CMS data loads OR key has no DB row, render an invisible placeholder
+    // (preserves layout height, never flashes hardcoded fallback).
+    if (loading || !hasContent || !viewValue) {
+      return (
+        <Component className={cn(className, 'opacity-0 select-none')} aria-hidden="true">
+          {'\u00A0'}
+        </Component>
+      );
+    }
+    return <Component className={className}>{viewValue}</Component>;
   }
 
   // In edit mode - show editable element
